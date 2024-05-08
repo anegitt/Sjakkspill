@@ -1,0 +1,207 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=Sedan+SC&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Quicksand;
+}
+
+:root {
+    --hvit: #E0E1DD;
+    --graablaa: #B2C0D2;
+    --mellomblaa: #415A77;
+    --morkblaa: #1B263B;
+    --RichBlack: #0D1B2A ;
+}
+
+
+/* hero section på hovedside*/
+#hero {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1)), url('sjakk_header.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100vh;
+    text-align: center;
+    color: white;
+    font-weight: 100;
+    font-size: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#heroinnhold {
+    margin: 50px 300px 0px 300px;
+    font-size: 22px;
+}
+
+header>h1 {
+    font-size: 80px;
+}
+
+header > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: rgba(0,0,0, 0.3);
+    width: 100%;
+    height: 85vh;
+}
+
+#sjakk_side_body {
+    background-image: url("sjakk.jpg");
+    background-size: cover;
+}
+
+body > #body_bakgrunnsuttoning {
+    background-color: rgba(0,0,0, 0.8);
+}
+
+nav {
+    width: 100%;
+    padding: 50px;
+    background-color: rgba(13, 27, 42, 0.9);
+    color: white;
+    font-size: 20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 30px;
+}
+
+#sjakk_side_main {
+    display: flex;
+    height: 80vh;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+#infoPaaSiden {
+    box-shadow: -5px -5px 10px rgba(0, 0, 0, 0.5);
+    width: 30%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: rgba(65, 90, 119, 0.9);
+    color: white;
+    font-size: 20px;
+}
+
+#spillbrettplassering {
+    box-shadow: -5px -5px 10px rgba(0, 0, 0, 0.5);
+}
+
+ footer {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    background-image: url("sjakk.jpg");
+    background-size: cover;
+    height: 45vh;
+    font-size: 20px;
+}
+
+footer > div {
+    background-color: rgba(13, 27, 42, 0.8);
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+#info_i_footer {
+    display: flex;
+    flex-direction: column;
+    margin: 100px 100px 50px 100px;
+} 
+
+#info_i_footer > i {
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+#hjelp_og_info {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+#hjelp_og_info > section {
+    width: 60%;
+    border-top: 2px dotted white;
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 19px;
+    margin-bottom: 20px;
+}
+
+#hjelp_og_info a {
+    font-size: 19px;
+    color: white;
+}
+
+#hjelp_og_info h2 {
+    margin: 15px 0px 10px 0px;
+    font-size: 22px;
+} 
+
+#spillbrett {
+    width: 640px;
+    height: 640px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.rute {
+    width: 80px;
+    height: 80px;
+    position: relative;  
+    box-shadow: -5px -5px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rute svg {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    position: relative;
+    z-index: -9;
+}
+
+path {
+    position: relative;
+    z-index: -10;
+}  
+
+.brikke {
+    position: relative;
+    z-index: 9;
+}
+
+.lys {
+    background-color: var(--graablaa);
+}
+
+.mork {
+    background-color: var(--mellomblaa); 
+}
+
+.svart {
+    fill: black;
+}
+
+.hvit {
+    fill: white;
+}
