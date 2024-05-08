@@ -117,56 +117,29 @@ function SlippEtterFlytt(e) {
 
 function finnesGyldigTrekk() {
 
-    const alleHviteBrikker = document.querySelectorAll(".hvit")
-    for (let hvitBrikkeIdx = 0; hvitBrikkeIdx < alleHviteBrikker.length; hvitBrikkeIdx++) {
-        const hvitBrikke = alleHviteBrikker[hvitBrikkeIdx]
+    const alleEgneBrikker = document.querySelectorAll("." + hvemSinTur)
+    for (let egenBrikkeIdx = 0; egenBrikkeIdx < alleEgneBrikker.length; egenBrikkeIdx++) {
+        const egenBrikke = alleEgneBrikker[egenBrikkeIdx]
 
-        brikke = hvitBrikke
+        brikke = egenBrikke
         const alleRuter = document.querySelectorAll(".rute")
 
         for (let alleRuterIdx = 0; alleRuterIdx < alleRuter.length; alleRuterIdx++) {
             const ruten = alleRuter[alleRuterIdx]
 
             const tatt = ruten.classList.contains("brikke")
-            const tattAvMotstander = ruten.firstChild?.classList.contains("svart")
+            const tattAvMotstander = ruten.firstChild?.classList.contains(hvemSinTur === "hvit" ? "svart" : "hvit")
             const gyldig = sjekkGyldighet(ruten)
 
-            if (gyldig && tattAvMotstander) {
+            if (gyldig && tattAvMotstander && !storISjakk()) {
                 //hvis en rute har den andre fargen sin brikke og trekket er gyldig er dette et gyldig trekk for den hvite brikken
-                return !storISjakk()
-            } else if (tatt && !tattAvMotstander) {
-                //hvis en rute er tatt av egen brikke er dette ikke et gyldig trekk for den hvite brikken
-                return false
-            } else if (gyldig) {
                 return true
-            }
+            }  else if (gyldig && !tatt && !storISjakk()) {
+                return true
+            } 
         }
     }
-
-    const alleSvarteBrikker = document.querySelectorAll(".svart")
-    for (let svartBrikkeIdx = 0; svartBrikkeIdx < alleSvarteBrikker.length; svartBrikkeIdx++) {
-        const svartBrikke = alleSvarteBrikker[svartBrikkeIdx]
-
-        brikke = svartBrikke
-        const alleRuter = document.querySelectorAll(".rute")
-
-        for (let alleRuterIdx = 0; alleRuterIdx < alleRuter.length; alleRuterIdx++) {
-            const ruten = alleRuter[alleRuterIdx]
-
-            const tatt = ruten.classList.contains("brikke")
-            const tattAvMotstander = ruten.firstChild?.classList.contains("hvit")
-            const gyldig = sjekkGyldighet(ruten)
-
-            if (gyldig && tattAvMotstander) { //hvis en rute har den andre fargen sin brikke og trekket er gyldig er dette et gyldig trekk for den hvite brikken
-                return true
-            } else if (tatt && !tattAvMotstander) { //hvis en rute er tatt av egen brikke er dette ikke et gyldig trekk for den hvite brikken
-                return false
-            } else if (gyldig) {
-                return true
-            }
-            // rute er et gyldig trekk for brikken og den ikke kommer i sjakk av flyttet returnes true, hvis den kommer i sjakk av flyttet er det ikke gyldig og det returnes false
-        }
-    }
+    return false
 }
 
 function vinnerAvSpillet() {
