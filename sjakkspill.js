@@ -80,16 +80,16 @@ function SlippEtterFlytt(e) {
         if (gyldig && tattAvMotstander) {
             e.target.parentNode.append(flyttetElement)
             e.target.remove()
-            // if (storISjakk()) {
-            //     flyttetElement.remove()
-            //     startPosisjon.append(flyttetElement)
-            //     infoOmSpillet.innerHTML = "Du står i sjakk"
+            if (storISjakk()) {
+                flyttetElement.remove()
+                startPosisjon.append(flyttetElement)
+                infoOmSpillet.innerHTML = "Du står i sjakk"
 
-            //     setTimeout(function () {
-            //         infoOmSpillet.innerHTML = ""
-            //     }, 3000)
-            //     return
-            // }
+                setTimeout(function () {
+                    infoOmSpillet.innerHTML = ""
+                }, 3000)
+                return
+            }
             hvemSkalFlytte()
             // vinnerAvSpillet()
             return
@@ -98,16 +98,16 @@ function SlippEtterFlytt(e) {
             return
         } else if (gyldig) {
             e.target.append(flyttetElement)
-            // if (storISjakk()) {
-            //     flyttetElement.remove()
-            //     startPosisjon.append(flyttetElement)
-            //     infoOmSpillet.innerHTML = "Du står i sjakk"
+            if (storISjakk()) {
+                flyttetElement.remove()
+                startPosisjon.append(flyttetElement)
+                infoOmSpillet.innerHTML = "Du står i sjakk"
 
-            //     setTimeout(function () {
-            //         infoOmSpillet.innerHTML = ""
-            //     }, 3000)
-            //     return
-            // }
+                setTimeout(function () {
+                    infoOmSpillet.innerHTML = ""
+                }, 3000)
+                return
+            }
             hvemSkalFlytte()
             // vinnerAvSpillet()
             return
@@ -200,10 +200,6 @@ function sjekkGyldighet(ruten) {
 
     let startRaden = document.querySelector(`[ruteId="${startRute}"]`).getAttribute("rad")
     let startKolonne = document.querySelector(`[ruteId="${startRute}"]`).getAttribute("kolonne")
-    console.log("startRad", startRaden)
-    console.log("startKolonne", startKolonne)
-    console.log("startRute", startRute)
-    console.log("sluttRute", sluttRute)
 
     switch (typeBrikke) {
         case "konge":
@@ -235,21 +231,21 @@ function sjekkGyldighet(ruten) {
             }
         case "hest":
             if (
-                startRad < 7 && startKolonne > 1 && startRute + bredde * 2 + 1 === sluttRute ||
-                startRad < 7 && startKolonne < 8 && startRute + bredde * 2 - 1 === sluttRute ||
-                startRad > 2 && startKolonne > 1 && startRute - bredde * 2 + 1 === sluttRute ||
-                startRad > 2 && startKolonne < 8 && startRute - bredde * 2 - 1 === sluttRute ||
-                startRad < 8 && startKolonne > 2 && startRute + bredde + 2 === sluttRute ||
-                startRad < 8 && startKolonne < 7 && startRute + bredde - 2 === sluttRute ||
-                startRad > 1 && startKolonne > 2 && startRute - bredde + 2 === sluttRute ||
-                startRad > 1 && startKolonne < 7 && startRute - bredde - 2 === sluttRute
+                startRaden < 7 && startKolonne > 1 && startRute + bredde * 2 + 1 === sluttRute ||
+                startRaden < 7 && startKolonne < 8 && startRute + bredde * 2 - 1 === sluttRute ||
+                startRaden > 2 && startKolonne > 1 && startRute - bredde * 2 + 1 === sluttRute ||
+                startRaden > 2 && startKolonne < 8 && startRute - bredde * 2 - 1 === sluttRute ||
+                startRaden < 8 && startKolonne > 2 && startRute + bredde + 2 === sluttRute ||
+                startRaden < 8 && startKolonne < 7 && startRute + bredde - 2 === sluttRute ||
+                startRaden > 1 && startKolonne > 2 && startRute - bredde + 2 === sluttRute ||
+                startRaden > 1 && startKolonne < 7 && startRute - bredde - 2 === sluttRute
             ) {
                 return true
             } else {
                 return false
             }
         case "loper":
-            
+
             if (
                 startKolonne > 1 && startRute + bredde + 1 === sluttRute ||
                 startKolonne > 2 && startRute + bredde * 2 + 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild ||
