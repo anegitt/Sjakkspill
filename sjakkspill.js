@@ -164,6 +164,10 @@ function snuBrettTilHvitTur() {
     const alleRuter = document.querySelectorAll(".rute")
     alleRuter.forEach(function (enkeltRute, i) {
         enkeltRute.setAttribute("ruteId", bredde * bredde - 1 - i)
+        let gammelRad = enkeltRute.getAttribute("rad")
+        enkeltRute.setAttribute("rad", 9 - gammelRad)
+        let gammelKolonne = enkeltRute.getAttribute("kolonne")
+        enkeltRute.setAttribute("kolonne", 9 - gammelKolonne)
     })
 }
 
@@ -171,6 +175,10 @@ function snuBrettTilSvartTur() {
     const alleRuter = document.querySelectorAll(".rute")
     alleRuter.forEach(function (enkeltRute, i) {
         enkeltRute.setAttribute("ruteId", i)
+        let gammelRad = enkeltRute.getAttribute("rad")
+        enkeltRute.setAttribute("rad", 9 - gammelRad)
+        let gammelKolonne = enkeltRute.getAttribute("kolonne")
+        enkeltRute.setAttribute("kolonne", 9 - gammelKolonne)
     })
 }
 
@@ -190,33 +198,12 @@ function sjekkGyldighet(ruten) {
         startRute = brikke.parentNode.getAttribute("ruteId")
     }
 
-    let startRad = document.querySelector(`[ruteId="${startRute}"]`).getAttribute("rad")
+    let startRaden = document.querySelector(`[ruteId="${startRute}"]`).getAttribute("rad")
     let startKolonne = document.querySelector(`[ruteId="${startRute}"]`).getAttribute("kolonne")
-    console.log("startRad", startRad)
+    console.log("startRad", startRaden)
     console.log("startKolonne", startKolonne)
     console.log("startRute", startRute)
     console.log("sluttRute", sluttRute)
-
-    // let sluttRad = document.querySelector(`[ruteId="${sluttRute}"]`).getAttribute("rad")
-    // let sluttKolonne = document.querySelector(`[ruteId="${sluttRute}"]`).getAttribute("kolonne")
-
-    // // hvis deltaX er negativ har den gått mot høyre, sjekk avstand mot kolonne 8 
-    // // hvis deltaX er positiv har den gått mot venstre, sjekk avstand mot kolonne 1
-    // let deltaX = startKolonne - sluttKolonne
-    // if (deltaX < 0 && 8 - startKolonne > Math.abs(deltaX)) {
-    //     return false
-    // } else if (deltaX > 0 && startKolonne > deltaX) {
-    //     return false
-    // }
-
-    // // hvis deltaY er negativ har den gått oppover, sjekk avstand til rad 8
-    // // hvis deltaY er positiv har den gått nedover, sjekk avstand tiil rad 1 
-    // let deltaY = startRad - sluttRad
-    // if (deltaY < 0 && 8 - startRad < Math.abs(deltaY)) {
-    //     return false
-    // } else if (deltaY > 0 && startRad < deltaY) {
-    //     return false
-    // }
 
     switch (typeBrikke) {
         case "konge":
@@ -248,14 +235,14 @@ function sjekkGyldighet(ruten) {
             }
         case "hest":
             if (
-                startRute + bredde * 2 + 1 === sluttRute ||
-                startRute + bredde * 2 - 1 === sluttRute ||
-                startRute - bredde * 2 + 1 === sluttRute ||
-                startRute - bredde * 2 - 1 === sluttRute ||
-                startRute + bredde + 2 === sluttRute ||
-                startRute + bredde - 2 === sluttRute ||
-                startRute - bredde + 2 === sluttRute ||
-                startRute - bredde - 2 === sluttRute
+                startRad < 7 && startKolonne > 1 && startRute + bredde * 2 + 1 === sluttRute ||
+                startRad < 7 && startKolonne < 8 && startRute + bredde * 2 - 1 === sluttRute ||
+                startRad > 2 && startKolonne > 1 && startRute - bredde * 2 + 1 === sluttRute ||
+                startRad > 2 && startKolonne < 8 && startRute - bredde * 2 - 1 === sluttRute ||
+                startRad < 8 && startKolonne > 2 && startRute + bredde + 2 === sluttRute ||
+                startRad < 8 && startKolonne < 7 && startRute + bredde - 2 === sluttRute ||
+                startRad > 1 && startKolonne > 2 && startRute - bredde + 2 === sluttRute ||
+                startRad > 1 && startKolonne < 7 && startRute - bredde - 2 === sluttRute
             ) {
                 return true
             } else {
@@ -263,7 +250,8 @@ function sjekkGyldighet(ruten) {
             }
         case "loper":
 
-        if (hvemSinTur === "hvit") {
+        console.log(startRad);
+
             if (
                 startKolonne > 1 && startRute + bredde + 1 === sluttRute ||
                 startKolonne > 2 && startRute + bredde * 2 + 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild ||
@@ -301,81 +289,40 @@ function sjekkGyldighet(ruten) {
             } else {
                 return false
             }
-        }
-        
 
-        if (hvemSinTur === "svart") {
-            if (
-                startKolonne < 8 && startRute + bredde + 1 === sluttRute ||
-                startKolonne < 7 && startRute + bredde * 2 + 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild ||
-                startKolonne < 6 && startRute + bredde * 3 + 3 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 + 2}"]`).firstChild ||
-                startKolonne < 5 && startRute + bredde * 4 + 4 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 + 3}"]`).firstChild ||
-                startKolonne < 4 && startRute + bredde * 5 + 5 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 + 4}"]`).firstChild ||
-                startKolonne < 3 && startRute + bredde * 6 + 6 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5 + 5}"]`).firstChild ||
-                startKolonne < 2 && startRute + bredde * 7 + 7 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5 + 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 6 + 6}"]`).firstChild ||
-
-                startKolonne > 1 && startRute + bredde - 1 === sluttRute ||
-                startKolonne > 2 && startRute + bredde * 2 - 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild ||
-                startKolonne > 3 && startRute + bredde * 3 - 3 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 - 2}"]`).firstChild ||
-                startKolonne > 4 && startRute + bredde * 4 - 4 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 - 3}"]`).firstChild ||
-                startKolonne > 5 && startRute + bredde * 5 - 5 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 - 4}"]`).firstChild ||
-                startKolonne > 6 && startRute + bredde * 6 - 6 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5 - 5}"]`).firstChild ||
-                startKolonne > 7 && startRute + bredde * 7 - 7 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5 - 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 6 - 6}"]`).firstChild ||
-
-                startKolonne < 8 && startRute - bredde + 1 === sluttRute ||
-                startKolonne < 7 && startRute - bredde * 2 + 2 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild ||
-                startKolonne < 6 && startRute - bredde * 3 + 3 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 + 2}"]`).firstChild ||
-                startKolonne < 5 && startRute - bredde * 4 + 4 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 + 3}"]`).firstChild ||
-                startKolonne < 4 && startRute - bredde * 5 + 5 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 + 4}"]`).firstChild ||
-                startKolonne < 3 && startRute - bredde * 6 + 6 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5 + 5}"]`).firstChild ||
-                startKolonne < 2 && startRute - bredde * 7 + 7 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5 + 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 6 + 6}"]`).firstChild ||
-
-                startKolonne > 1 && startRute - bredde - 1 === sluttRute ||
-                startKolonne > 2 && startRute - bredde * 2 - 2 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild ||
-                startKolonne > 3 && startRute - bredde * 3 - 3 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 - 2}"]`).firstChild ||
-                startKolonne > 4 && startRute - bredde * 4 - 4 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 - 3}"]`).firstChild ||
-                startKolonne > 5 && startRute - bredde * 5 - 5 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 - 4}"]`).firstChild ||
-                startKolonne > 6 && startRute - bredde * 6 - 6 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5 - 5}"]`).firstChild ||
-                startKolonne > 7 && startRute - bredde * 7 - 7 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5 - 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 6 - 6}"]`).firstChild
-            ) {
-                return true
-            } else {
-                return false
-            }
-        }
         case "torn":
             if (
-                startRute + bredde === sluttRute ||
-                startRute + bredde * 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild ||
-                startRute + bredde * 3 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild ||
-                startRute + bredde * 4 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3}"]`).firstChild ||
-                startRute + bredde * 5 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4}"]`).firstChild ||
-                startRute + bredde * 6 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 6}"]`).firstChild ||
-                startRute + bredde * 7 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 6}"]`).firstChild ||
+                startRaden < 8 && startRute + bredde === sluttRute ||
+                startRaden < 7 && startRute + bredde * 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild ||
+                startRaden < 6 && startRute + bredde * 3 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild ||
+                startRaden < 5 && startRute + bredde * 4 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3}"]`).firstChild ||
+                startRaden < 4 && startRute + bredde * 5 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4}"]`).firstChild ||
+                startRaden < 3 && startRute + bredde * 6 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 6}"]`).firstChild ||
+                startRaden < 2 && startRute + bredde * 7 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 6}"]`).firstChild ||
 
-                startRute - bredde === sluttRute ||
-                startRute - bredde * 2 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild ||
-                startRute - bredde * 3 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild ||
-                startRute - bredde * 4 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3}"]`).firstChild ||
-                startRute - bredde * 5 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4}"]`).firstChild ||
-                startRute - bredde * 6 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 6}"]`).firstChild ||
-                startRute - bredde * 7 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 6}"]`).firstChild ||
+                startRaden > 1 && startRute - bredde === sluttRute ||
+                startRaden > 2 && startRute - bredde * 2 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild ||
+                startRaden > 3 && startRute - bredde * 3 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild ||
+                startRaden > 4 && startRute - bredde * 4 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3}"]`).firstChild ||
+                startRaden > 5 && startRute - bredde * 5 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4}"]`).firstChild ||
+                startRaden > 6 && startRute - bredde * 6 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 6}"]`).firstChild ||
+                startRaden > 7 &&  startRute - bredde * 7 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 6}"]`).firstChild ||
 
-                startRute + 1 === sluttRute ||
-                startRute + 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild ||
-                startRute + 3 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild ||
-                startRute + 4 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 3}"]`).firstChild ||
-                startRute + 5 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 4}"]`).firstChild ||
-                startRute + 6 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 6}"]`).firstChild ||
-                startRute + 7 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 6}"]`).firstChild ||
+                startKolonne > 1 && startRute + 1 === sluttRute ||
+                startKolonne > 2 && startRute + 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild ||
+                startKolonne > 3 && startRute + 3 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild ||
+                startKolonne > 4 && startRute + 4 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 3}"]`).firstChild ||
+                startKolonne > 5 && startRute + 5 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 4}"]`).firstChild ||
+                startKolonne > 6 && startRute + 6 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 6}"]`).firstChild ||
+                startKolonne > 7 && startRute + 7 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 6}"]`).firstChild ||
 
-                startRute - 1 === sluttRute ||
-                startRute - 2 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild ||
-                startRute - 3 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild ||
-                startRute - 4 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 3}"]`).firstChild ||
-                startRute - 5 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 4}"]`).firstChild ||
-                startRute - 6 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 6}"]`).firstChild ||
-                startRute - 7 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 6}"]`).firstChild
+                startKolonne < 8 && startRute - 1 === sluttRute ||
+                startKolonne < 7 && startRute - 2 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild ||
+                startKolonne < 6 && startRute - 3 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild ||
+                startKolonne < 5 && startRute - 4 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 3}"]`).firstChild ||
+                startKolonne < 4 && startRute - 5 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 4}"]`).firstChild ||
+                startKolonne < 3 && startRute - 6 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 6}"]`).firstChild ||
+                startKolonne < 2 && startRute - 7 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 6}"]`).firstChild
             ) {
                 return true
             } else {
@@ -383,69 +330,71 @@ function sjekkGyldighet(ruten) {
             }
         case "dronning":
             if (
-                startRute + bredde === sluttRute ||
-                startRute + bredde * 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild ||
-                startRute + bredde * 3 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild ||
-                startRute + bredde * 4 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3}"]`).firstChild ||
-                startRute + bredde * 5 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4}"]`).firstChild ||
-                startRute + bredde * 6 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 6}"]`).firstChild ||
-                startRute + bredde * 7 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 6}"]`).firstChild ||
+                //loper
+                startKolonne > 1 && startRute + bredde + 1 === sluttRute ||
+                startKolonne > 2 && startRute + bredde * 2 + 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild ||
+                startKolonne > 3 && startRute + bredde * 3 + 3 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 + 2}"]`).firstChild ||
+                startKolonne > 4 && startRute + bredde * 4 + 4 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 + 3}"]`).firstChild ||
+                startKolonne > 5 && startRute + bredde * 5 + 5 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 + 4}"]`).firstChild ||
+                startKolonne > 6 && startRute + bredde * 6 + 6 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5 + 5}"]`).firstChild ||
+                startKolonne > 7 && startRute + bredde * 7 + 7 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5 + 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 6 + 6}"]`).firstChild ||
 
-                startRute - bredde === sluttRute ||
-                startRute - bredde * 2 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild ||
-                startRute - bredde * 3 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild ||
-                startRute - bredde * 4 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3}"]`).firstChild ||
-                startRute - bredde * 5 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4}"]`).firstChild ||
-                startRute - bredde * 6 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 6}"]`).firstChild ||
-                startRute - bredde * 7 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 6}"]`).firstChild ||
+                startKolonne < 8 && startRute + bredde - 1 === sluttRute ||
+                startKolonne < 7 && startRute + bredde * 2 - 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild ||
+                startKolonne < 6 && startRute + bredde * 3 - 3 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 - 2}"]`).firstChild ||
+                startKolonne < 5 && startRute + bredde * 4 - 4 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 - 3}"]`).firstChild ||
+                startKolonne < 4 && startRute + bredde * 5 - 5 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 - 4}"]`).firstChild ||
+                startKolonne < 3 && startRute + bredde * 6 - 6 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5 - 5}"]`).firstChild ||
+                startKolonne < 2 && startRute + bredde * 7 - 7 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5 - 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 6 - 6}"]`).firstChild ||
 
-                startRute + 1 === sluttRute ||
-                startRute + 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild ||
-                startRute + 3 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild ||
-                startRute + 4 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 3}"]`).firstChild ||
-                startRute + 5 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 4}"]`).firstChild ||
-                startRute + 6 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 6}"]`).firstChild ||
-                startRute + 7 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 6}"]`).firstChild ||
+                startKolonne > 1 && startRute - bredde + 1 === sluttRute ||
+                startKolonne > 2 && startRute - bredde * 2 + 2 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild ||
+                startKolonne > 3 && startRute - bredde * 3 + 3 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 + 2}"]`).firstChild ||
+                startKolonne > 4 && startRute - bredde * 4 + 4 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 + 3}"]`).firstChild ||
+                startKolonne > 5 && startRute - bredde * 5 + 5 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 + 4}"]`).firstChild ||
+                startKolonne > 6 && startRute - bredde * 6 + 6 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5 + 5}"]`).firstChild ||
+                startKolonne > 7 && startRute - bredde * 7 + 7 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5 + 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 6 + 6}"]`).firstChild ||
 
-                startRute - 1 === sluttRute ||
-                startRute - 2 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild ||
-                startRute - 3 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild ||
-                startRute - 4 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 3}"]`).firstChild ||
-                startRute - 5 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 4}"]`).firstChild ||
-                startRute - 6 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 6}"]`).firstChild ||
-                startRute - 7 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 6}"]`).firstChild ||
+                startKolonne < 8 && startRute - bredde - 1 === sluttRute ||
+                startKolonne < 8 && startRute - bredde * 2 - 2 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild ||
+                startKolonne < 8 && startRute - bredde * 3 - 3 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 - 2}"]`).firstChild ||
+                startKolonne < 8 && startRute - bredde * 4 - 4 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 - 3}"]`).firstChild ||
+                startKolonne < 8 && startRute - bredde * 5 - 5 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 - 4}"]`).firstChild ||
+                startKolonne < 8 && startRute - bredde * 6 - 6 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5 - 5}"]`).firstChild ||
+                startKolonne < 8 && startRute - bredde * 7 - 7 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5 - 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 6 - 6}"]`).firstChild ||
+           
+                //torn
+                startRaden < 8 && startRute + bredde === sluttRute ||
+                startRaden < 7 && startRute + bredde * 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild ||
+                startRaden < 6 && startRute + bredde * 3 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild ||
+                startRaden < 5 && startRute + bredde * 4 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3}"]`).firstChild ||
+                startRaden < 4 && startRute + bredde * 5 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4}"]`).firstChild ||
+                startRaden < 3 && startRute + bredde * 6 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 6}"]`).firstChild ||
+                startRaden < 2 && startRute + bredde * 7 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 6}"]`).firstChild ||
 
-                startRute + bredde + 1 === sluttRute ||
-                startRute + bredde * 2 + 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild ||
-                startRute + bredde * 3 + 3 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 + 2}"]`).firstChild ||
-                startRute + bredde * 4 + 4 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 + 3}"]`).firstChild ||
-                startRute + bredde * 5 + 5 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 + 4}"]`).firstChild ||
-                startRute + bredde * 6 + 6 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5 + 5}"]`).firstChild ||
-                startRute + bredde * 7 + 7 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5 + 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 6 + 6}"]`).firstChild ||
+                startRaden > 1 && startRute - bredde === sluttRute ||
+                startRaden > 2 && startRute - bredde * 2 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild ||
+                startRaden > 3 && startRute - bredde * 3 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild ||
+                startRaden > 4 && startRute - bredde * 4 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3}"]`).firstChild ||
+                startRaden > 5 && startRute - bredde * 5 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4}"]`).firstChild ||
+                startRaden > 6 && startRute - bredde * 6 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 6}"]`).firstChild ||
+                startRaden > 7 &&  startRute - bredde * 7 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 6}"]`).firstChild ||
 
-                startRute + bredde - 1 === sluttRute ||
-                startRute + bredde * 2 - 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild ||
-                startRute + bredde * 3 - 3 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 - 2}"]`).firstChild ||
-                startRute + bredde * 4 - 4 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 - 3}"]`).firstChild ||
-                startRute + bredde * 5 - 5 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 - 4}"]`).firstChild ||
-                startRute + bredde * 6 - 6 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5 - 5}"]`).firstChild ||
-                startRute + bredde * 7 - 7 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 4 - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 5 - 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + bredde * 6 - 6}"]`).firstChild ||
+                startKolonne > 1 && startRute + 1 === sluttRute ||
+                startKolonne > 2 && startRute + 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild ||
+                startKolonne > 3 && startRute + 3 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild ||
+                startKolonne > 4 && startRute + 4 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 3}"]`).firstChild ||
+                startKolonne > 5 && startRute + 5 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 4}"]`).firstChild ||
+                startKolonne > 6 && startRute + 6 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 6}"]`).firstChild ||
+                startKolonne > 7 && startRute + 7 === sluttRute && !document.querySelector(`[ruteId="${startRute + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute + 6}"]`).firstChild ||
 
-                startRute - bredde + 1 === sluttRute ||
-                startRute - bredde * 2 + 2 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild ||
-                startRute - bredde * 3 + 3 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 + 2}"]`).firstChild ||
-                startRute - bredde * 4 + 4 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 + 3}"]`).firstChild ||
-                startRute - bredde * 5 + 5 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 + 4}"]`).firstChild ||
-                startRute - bredde * 6 + 6 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5 + 5}"]`).firstChild ||
-                startRute - bredde * 7 + 7 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde + 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 + 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 + 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 + 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5 + 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 6 + 6}"]`).firstChild ||
-
-                startRute - bredde - 1 === sluttRute ||
-                startRute - bredde * 2 - 2 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild ||
-                startRute - bredde * 3 - 3 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 - 2}"]`).firstChild ||
-                startRute - bredde * 4 - 4 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 - 3}"]`).firstChild ||
-                startRute - bredde * 5 - 5 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 - 4}"]`).firstChild ||
-                startRute - bredde * 6 - 6 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5 - 5}"]`).firstChild ||
-                startRute - bredde * 7 - 7 === sluttRute && !document.querySelector(`[ruteId="${startRute - bredde - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 2 - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 3 - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 4 - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 5 - 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - bredde * 6 - 6}"]`).firstChild
+                startKolonne < 8 && startRute - 1 === sluttRute ||
+                startKolonne < 7 && startRute - 2 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild ||
+                startKolonne < 6 && startRute - 3 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild ||
+                startKolonne < 5 && startRute - 4 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 3}"]`).firstChild ||
+                startKolonne < 4 && startRute - 5 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 4}"]`).firstChild ||
+                startKolonne < 3 && startRute - 6 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 6}"]`).firstChild ||
+                startKolonne < 2 && startRute - 7 === sluttRute && !document.querySelector(`[ruteId="${startRute - 1}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 2}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 3}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 4}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 5}"]`).firstChild && !document.querySelector(`[ruteId="${startRute - 6}"]`).firstChild
             ) {
                 return true
             } else {
