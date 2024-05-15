@@ -249,9 +249,7 @@ function sjekkGyldighet(ruten) {
                 return false
             }
         case "loper":
-
-        console.log(startRad);
-
+            
             if (
                 startKolonne > 1 && startRute + bredde + 1 === sluttRute ||
                 startKolonne > 2 && startRute + bredde * 2 + 2 === sluttRute && !document.querySelector(`[ruteId="${startRute + bredde + 1}"]`).firstChild ||
