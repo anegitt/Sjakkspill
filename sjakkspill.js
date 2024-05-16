@@ -91,7 +91,7 @@ function SlippEtterFlytt(e) {
                 return
             }
             hvemSkalFlytte()
-            // vinnerAvSpillet()
+            // vinnerAvSpillet() blir feil fordi den ikke sjekker etter brikken flyttes i sjakk, men ville ikke slette den så jeg kan forstette en gang
             return
         } else if (tatt && !tattAvMotstander) {
             // kan ikke ta sin egen brikke
